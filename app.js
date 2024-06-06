@@ -20,9 +20,17 @@ let pcArr = []; //pc seçim dizisi
 
 //& Score
 const scoreCardSection = document.querySelector(".score-card")
-const pcScoreSpan=document.getElementById("pc-score")
-const yourScoreSpan=document.getElementById("your-score")
-const domTopscore=document.getElementById("top-score")
+const pcScoreSpan = document.getElementById("pc-score")
+const yourScoreSpan = document.getElementById("your-score")
+const domTopscore = document.getElementById("top-score")
+
+//& Modal
+
+const modalCardSection = document.querySelector(".modal-card")
+const finalMessagePar = document.getElementById("final-message")
+const playAgainButton = document.getElementById("play-again")
+const modal = document.querySelector(".modal")
+
 
 
 //! Selection
@@ -33,6 +41,7 @@ selectionArticle.addEventListener("click",(e)=>{
 
     if (userSelection) {
         userSelectImg.src = `./assets/${userSelection}.png`
+        userSelectImg.id = 'you'
         yourCoiceDiv.appendChild(userSelectImg)
         
     }
@@ -44,10 +53,12 @@ selectionArticle.addEventListener("click",(e)=>{
 
 const createPCSelection = () => {
     pcArr = ["rock", "paper", "scissor" ]
+    // pcRandom = 'rock' //hile fonksiyonu
     // pcRandom =Math.floor(Math.random()*3) //1. yöntem
     pcRandom = pcArr[Math.trunc(Math.random()*3)]  //2. yöntem
     // console.log(pcRandom)
     pcSelectImg.src = `./assets/${pcRandom}.png`
+    pcSelectImg.id = 'pcs'
     pcCoiceDiv.appendChild(pcSelectImg)
 
     calculateResult()
@@ -61,12 +72,16 @@ const calculateResult = () => {
         draw()
     } else {
         if (userSelection === "rock") {
-            pcRandom === "paper" ? youLost() : youWin()
+            pcRandom === "paper" ? youLost(userSelection) : youWin(pcRandom)
         } else if(userSelection === "scissor"){
-            pcRandom === "rock" ? youLost() : youWin()
+            pcRandom === "rock" ? youLost(userSelection) : youWin(pcRandom)
         } else if(userSelection === "paper"){
-            pcRandom === "scissor" ? youLost() : youWin()
+            pcRandom === "scissor" ? youLost(userSelection) : youWin(pcRandom)
         }
+    }
+
+    if (pcScoreSpan.textContent === "10" || yourScoreSpan.textContent === "10") {
+        openModal()
     }
 }
 
@@ -77,19 +92,38 @@ const draw = () => {
 
 }
 
-const youLost = ()=>{
-    console.log("you Lost")
-    messagePar.textContent="it's a draw";
-    scoreCardSection.style.color=RED;
-    messagePar.style.backgroundColor=RED
+const youLost = (userSelection)=>{
+    messagePar.textContent = "You Lost";
+    scoreCardSection.style.color = RED;
+    messagePar.style.backgroundColor = RED;
     pcScoreSpan.textContent++
-
+    document.getElementById('you').setAttribute('src', `./assets/${userSelection}l.png`)
 }
 
-const youWin = ()=>{
-    console.log("you Win")
-    messagePar.textContent="it's a draw";
-    scoreCardSection.style.color=GREEN;
-    messagePar.style.backgroundColor=GREEN
+const youWin = (pcRandom)=>{
+    messagePar.textContent = "You Win";
+    scoreCardSection.style.color = GREEN;
+    messagePar.style.backgroundColor = GREEN
     yourScoreSpan.textContent++
+    document.getElementById('pcs').setAttribute('src', `./assets/${pcRandom}l.png`)
 }
+
+const openModal = () => {
+    modalCardSection.classList.add("show")
+
+    if (yourScoreSpan.textContent == '10') {
+        finalMessagePar.textContent = "You win 🎉"
+        modal.style.backgroundColor = GREEN
+        playAgainButton.style.color = GREEN
+               
+    } else {
+        finalMessagePar.textContent = "You Lost ☹️"
+        modal.style.backgroundColor = RED
+        playAgainButton.style.color = RED
+    }
+    
+}
+
+playAgainButton.addEventListener('click', ()=>{
+    window.location.reload()
+})
