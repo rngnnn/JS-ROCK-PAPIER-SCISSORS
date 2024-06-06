@@ -115,6 +115,7 @@ const openModal = () => {
         finalMessagePar.textContent = "You win 🎉"
         modal.style.backgroundColor = GREEN
         playAgainButton.style.color = GREEN
+        updateTopScore()
                
     } else {
         finalMessagePar.textContent = "You Lost ☹️"
@@ -126,4 +127,23 @@ const openModal = () => {
 
 playAgainButton.addEventListener('click', ()=>{
     window.location.reload()
+})
+
+
+//! Top Score check window refresh yapılınca siliniyor
+const storedScore = localStorage.getItem("highScore") // localstorage den veri alır
+console.log(storedScore)
+const topScore = storedScore ? `10 - ${storedScore} ` : "0 - 0"
+domTopscore.innerText = topScore //DOM a yazdırır
+
+
+function updateTopScore (){
+  if(!storedScore || storedScore > +pcScoreSpan.textContent){
+    localStorage.setItem("highScore", pcScoreSpan.textContent)
+  }
+
+}
+
+domTopscore.addEventListener("dblclick",()=>{
+    localStorage.removeItem('highScore')
 })
