@@ -4,9 +4,7 @@ let yourCoiceDiv = document.getElementById("your-choice")
 const pcCoiceDiv = document.getElementById("pc-choice")
 
 //& message
-
 const messagePar = document.querySelector(".message")
-
 
 //& Colors
 const YELLOW = "#ffc538";
@@ -22,6 +20,9 @@ let pcArr = []; //pc seçim dizisi
 
 //& Score
 const scoreCardSection = document.querySelector(".score-card")
+const pcScoreSpan=document.getElementById("pc-score")
+const yourScoreSpan=document.getElementById("your-score")
+const domTopscore=document.getElementById("top-score")
 
 
 //! Selection
@@ -58,6 +59,14 @@ const calculateResult = () => {
 
     if (userSelection == pcRandom) {
         draw()
+    } else {
+        if (userSelection === "rock") {
+            pcRandom === "paper" ? youLost() : youWin()
+        } else if(userSelection === "scissor"){
+            pcRandom === "rock" ? youLost() : youWin()
+        } else if(userSelection === "paper"){
+            pcRandom === "scissor" ? youLost() : youWin()
+        }
     }
 }
 
@@ -66,4 +75,21 @@ const draw = () => {
     scoreCardSection.style.color = YELLOW;
     messagePar.style.backgroundColor = YELLOW
 
+}
+
+const youLost = ()=>{
+    console.log("you Lost")
+    messagePar.textContent="it's a draw";
+    scoreCardSection.style.color=RED;
+    messagePar.style.backgroundColor=RED
+    pcScoreSpan.textContent++
+
+}
+
+const youWin = ()=>{
+    console.log("you Win")
+    messagePar.textContent="it's a draw";
+    scoreCardSection.style.color=GREEN;
+    messagePar.style.backgroundColor=GREEN
+    yourScoreSpan.textContent++
 }
